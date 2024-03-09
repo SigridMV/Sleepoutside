@@ -5,14 +5,7 @@ export function qs(selector, parent = document) {
 
 // retrieve data from localstorage
 export function getLocalStorage(key) {
-  const storedData = localStorage.getItem(key);
-  try {
-    const parsedData = JSON.parse(storedData);
-    return Array.isArray(parsedData) ? parsedData : [];
-  } catch (error) {
-    console.error("Error getLocalStorage", error);
-    return []; 
-  }
+  return JSON.parse(localStorage.getItem(key));
 }
 
 // save data to local storage
@@ -22,28 +15,17 @@ export function setLocalStorage(key, data) {
 
 // set a listener for both touchend and click
 export function setClick(selector, callback) {
-  const element = qs(selector);
-  
-  element.addEventListener("touchend", (event) => {
+  qs(selector).addEventListener("touchend", (event) => {
     event.preventDefault();
     callback();
-    updateCartView();
   });
-  
-  element.addEventListener("click", () => {
-    callback();
-    updateCartView();
-  });
+  qs(selector).addEventListener("click", callback);
+}
 
-  function updateCartView() {
-    const cartItems = getLocalStorage("so-cart");
-    const cartContainer = qs(".cart-items");
-    cartContainer.innerHTML = "";
-  
-    cartItems.forEach((item) => {
-      const cartItemElement = document.createElement("li");
-      cartItemElement.textContent = `${item.Name} - $${item.FinalPrice}`;
-      cartContainer.appendChild(cartItemElement);
-    });
-  }
+// helper to get parameter strings
+export function getParam(param) {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const product = urlParams.get(param);
+  return product;
 }

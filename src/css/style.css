@@ -200,6 +200,11 @@ button {
 .cart-card__price {
   grid-row: 2;
   grid-column: 3;
+  text-decoration:line-through
+}
+
+.cart-card__discount{
+  color: red;
 }
 
 @media screen and (min-width: 500px) {
